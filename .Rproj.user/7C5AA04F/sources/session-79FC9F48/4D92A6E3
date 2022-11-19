@@ -3,7 +3,7 @@
     "path": "~/Documentos/uai/P2Espaciales/P2Esp.R",
     "project_path": "P2Esp.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "925514903",
     "contents": "",
     "dirty": false,
     "created": 1668889190576.0,
@@ -12,14 +12,16 @@
     "properties": {
         "tempName": "Untitled1",
         "source_window_id": "",
-        "Source": "Source"
+        "Source": "Source",
+        "cursorPosition": "27,44",
+        "scrollLine": "6"
     },
     "folds": "",
-    "lastKnownWriteTime": 1668889204,
+    "lastKnownWriteTime": 1668899167,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1668889204331,
+    "last_content_update": 1668899167752,
     "read_only": false,
     "read_only_alternatives": []
 }
