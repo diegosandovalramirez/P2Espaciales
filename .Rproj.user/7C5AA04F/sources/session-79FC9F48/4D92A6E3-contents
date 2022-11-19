@@ -27,6 +27,45 @@ mz_SII <- read_rds("iquique/mz_SII_iquique.rds")
 ggplot() +
   geom_sf(data = mz_SII, aes(fill=comercio))
 
+#############################################################
+# Impute los datos de ambos raster a los puntos de tasaciones 
+#############################################################
+
+
+
+##############################################################
+# Genere un modelo OLS para estimar el precio de las viviendas 
+# a partir de las otras variables disponibles
+##############################################################
+
+
+
+############################################
+# Ejecute los diagnósticos de error espacial 
+############################################
+
+
+
+###############################################################
+# Genere una matriz de vecinos mas cercanos para las tasaciones 
+###############################################################
+
+
+
+################################################################################
+# Genere el modelo de regresión espacial correspondiente al diagnóstico obtenido
+################################################################################
+
+
+
+################################################################################
+# Responda: ¿Qué variable del entorno tiene más impacto en el valor de viviendas?
+################################################################################
+
+
+
+
+
 
 
 
