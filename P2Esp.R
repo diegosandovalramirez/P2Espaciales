@@ -8,33 +8,23 @@ pacman::p_load(rgdal, rgeos, stars, spatstat, spdep, sf, raster,
 #################################################################
 # Genere un raster interpolando la variable ESCOLARIDAD del censo
 #################################################################
-
-# Datos censales iquique escolaridad promedio
-iq_esc <- readRDS("iquique/mz_censo17_iquique.rds") %>%
-  dplyr::select(JH_ESC_P)%>%
+iq_cen17 <- readRDS("iquique/mz_censo17_iquique.rds") %>%
   st_as_sf() %>%
-  drop_na()
-
-mz_point <- iq_esc %>% 
-  st_centroid()
-
-# visualizamos escolaridad 
-ggplot() +
-  geom_sf(data = iq_esc) +
-  geom_sf(data = mz_point)
+  drop_na() %>%
+  st_transform("+proj=utm +zone=19 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
 # *************************
 # Ponderacion por distancia ----
 # *************************
 
-gs <- gstat(formula = mz_point$JH_ESC_P~1, locations = iq_esc)
+gs <- gstat(formula = iq_cen17$JH_ESC_P~1, locations = iq_cen17)
 
-rast <- raster(iq_esc, res=50)
+rast <- raster(iq_cen17, res=30)
 
-##aqui caga
 idw <- interpolate(rast, gs)
 
 plot(idw, col = viridis::viridis(100), main='Interpolacion de Escolaridad')
+
 
 ########################################################################
 # Genere un raster con kernel de densidad de la variable MtOfCom del SII
