@@ -1,20 +1,40 @@
-# Basado en 08_autocorrelacion_espacial.R en Geospatial de github.com/raimun2
+# Basado en 08_autocorrelacion_espacial.R y 10_inferencia_espacial.R 
+# en Geospatial de github.com/raimun2
 
-# Cargar Librerias
-pacman::p_load(tidyverse, sf, MASS, gstat, raster, 
-               spdep, spatialreg, patchwork)
+pacman::p_load(rgdal, rgeos, stars, spatstat, spdep, sf, raster,
+               spatialreg, tidyverse, gstat, MASS)
 
 
 #################################################################
 # Genere un raster interpolando la variable ESCOLARIDAD del censo
 #################################################################
 
-# manzanas iquique
-mz_iq17 <- read_rds("iquique/mz_censo17_iquique.rds") 
+# Datos censales iquique escolaridad promedio
+iq_esc <- readRDS("iquique/mz_censo17_iquique.rds") %>%
+  dplyr::select(JH_ESC_P)%>%
+  st_as_sf() %>%
+  drop_na()
+
+mz_point <- iq_esc %>% 
+  st_centroid()
 
 # visualizamos escolaridad 
 ggplot() +
-  geom_sf(data = mz_iq17, aes(fill=JH_ESC_P))
+  geom_sf(data = iq_esc) +
+  geom_sf(data = mz_point)
+
+# *************************
+# Ponderacion por distancia ----
+# *************************
+
+gs <- gstat(formula = mz_point$JH_ESC_P~1, locations = iq_esc)
+
+rast <- raster(iq_esc, res=50)
+
+##aqui caga
+idw <- interpolate(rast, gs)
+
+plot(idw, col = viridis::viridis(100), main='Interpolacion de Escolaridad')
 
 ########################################################################
 # Genere un raster con kernel de densidad de la variable MtOfCom del SII
@@ -31,7 +51,14 @@ ggplot() +
 # Impute los datos de ambos raster a los puntos de tasaciones 
 #############################################################
 
+tasaciones_iquique <- readRDS("iquique/tasacion_iquique.rds") %>%
+  st_as_sf()
 
+ggplot() +
+  geom_sf(data = mz_SII, aes(fill=comercio)) +
+  geom_sf(data = mz_iq17, aes(fill=JH_ESC_P)) +
+  geom_sf(data = tasaciones_iquique)
+#no se como chucha hacer que se vean las 2 primeras y la 3ra
 
 ##############################################################
 # Genere un modelo OLS para estimar el precio de las viviendas 
